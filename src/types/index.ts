@@ -16,7 +16,7 @@ export interface DiaryEntry {
   updatedAt: Date;
 }
 
-export type WorkoutType = 'legs' | 'chest' | 'back' | 'arms';
+export type WorkoutType = 'legs' | 'chest' | 'back' | 'arms' | 'cardio';
 
 export interface WorkoutEntry {
   id: string;

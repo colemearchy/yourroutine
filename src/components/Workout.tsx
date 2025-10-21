@@ -9,6 +9,7 @@ const workoutTypes: { type: WorkoutType; label: string; emoji: string; color: st
   { type: 'chest', label: '가슴', emoji: '💪', color: 'bg-red-500' },
   { type: 'back', label: '등', emoji: '🏋️', color: 'bg-green-500' },
   { type: 'arms', label: '팔', emoji: '💪', color: 'bg-yellow-500' },
+  { type: 'cardio', label: '유산소', emoji: '🏃', color: 'bg-purple-500' },
 ];
 
 export const Workout = () => {
@@ -19,16 +20,24 @@ export const Workout = () => {
   const [notes, setNotes] = useState('');
 
   const handleAddWorkout = () => {
-    if (exercises.trim()) {
-      addWorkoutEntry({
-        date: selectedDate,
-        type: selectedType,
-        exercises: exercises.split('\n').filter((e) => e.trim()),
-        notes: notes || undefined,
-      });
-      setExercises('');
-      setNotes('');
+    if (!exercises.trim()) {
+      alert('운동 내용을 입력해주세요.');
+      return;
     }
+
+    addWorkoutEntry({
+      date: selectedDate,
+      type: selectedType,
+      exercises: exercises.split('\n').filter((e) => e.trim()),
+      notes: notes || undefined,
+    });
+
+    // 폼 초기화
+    setExercises('');
+    setNotes('');
+
+    // 성공 메시지는 표시하지 않고, 폼만 초기화
+    // 사용자는 아래 목록에서 추가된 것을 확인할 수 있음
   };
 
   const todayWorkouts = getWorkoutsByDate(selectedDate);
@@ -80,7 +89,7 @@ export const Workout = () => {
         <h3 className="text-lg font-semibold text-gray-800 mb-3">운동 기록 추가</h3>
 
         {/* Workout Type Selection */}
-        <div className="grid grid-cols-4 gap-2 mb-4">
+        <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 mb-4">
           {workoutTypes.map((workout) => (
             <button
               key={workout.type}
