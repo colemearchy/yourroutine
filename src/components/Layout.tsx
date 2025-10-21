@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react';
 import { Home, BookOpen, Dumbbell, TrendingUp, Settings as SettingsIcon } from 'lucide-react';
+import { useTranslation } from '../i18n/useTranslation';
 
 export type TabType = 'home' | 'diary' | 'workout' | 'finance' | 'settings';
 
@@ -10,19 +11,21 @@ interface LayoutWithTabsProps {
 }
 
 export const Layout = ({ activeTab, onTabChange, children }: LayoutWithTabsProps) => {
+  const { t } = useTranslation();
+
   const tabs = [
-    { id: 'home' as TabType, label: '홈', icon: Home },
-    { id: 'diary' as TabType, label: '다이어리', icon: BookOpen },
-    { id: 'workout' as TabType, label: '운동', icon: Dumbbell },
-    { id: 'finance' as TabType, label: '금융', icon: TrendingUp },
-    { id: 'settings' as TabType, label: '설정', icon: SettingsIcon },
+    { id: 'home' as TabType, label: t('home'), icon: Home },
+    { id: 'diary' as TabType, label: t('diary'), icon: BookOpen },
+    { id: 'workout' as TabType, label: t('workout'), icon: Dumbbell },
+    { id: 'finance' as TabType, label: t('finance'), icon: TrendingUp },
+    { id: 'settings' as TabType, label: t('settings'), icon: SettingsIcon },
   ];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-20">
       {/* Header */}
       <header className="bg-gradient-to-r from-primary-500 to-primary-600 text-white p-4 shadow-lg">
-        <h1 className="text-2xl font-bold">알파 루틴</h1>
+        <h1 className="text-2xl font-bold">{t('appName')}</h1>
       </header>
 
       {/* Content */}
