@@ -3,9 +3,11 @@ import { Calendar, Save } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { getTodayString, formatDate } from '../utils/date';
 import { Toast } from './Toast';
+import { useTranslation } from '../i18n/useTranslation';
 
 export const Diary = () => {
   const { addDiaryEntry, updateDiaryEntry, getDiaryByDate } = useStore();
+  const { t } = useTranslation();
   const [selectedDate, setSelectedDate] = useState(getTodayString());
   const [content, setContent] = useState('');
   const [showToast, setShowToast] = useState(false);
@@ -42,41 +44,41 @@ export const Diary = () => {
 
   return (
     <>
-      <Toast message="Saved" show={showToast} onClose={() => setShowToast(false)} />
+      <Toast message={t('saved')} show={showToast} onClose={() => setShowToast(false)} />
       <div className="space-y-4">
         {/* Date Picker */}
-      <div className="bg-white rounded-lg shadow-md p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
         <div className="flex items-center gap-2">
           <Calendar className="text-primary-500" size={20} />
           <input
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:text-gray-100"
           />
         </div>
-        <p className="text-sm text-gray-500 mt-2">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
           {formatDate(selectedDate, 'yyyy년 MM월 dd일 EEEE')}
         </p>
       </div>
 
       {/* Diary Content */}
-      <div className="bg-white rounded-lg shadow-md p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-semibold text-gray-800">오늘의 일기</h3>
-          <div className="flex items-center gap-1 text-xs text-gray-400">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">{t('todaysDiary')}</h3>
+          <div className="flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500">
             <Save size={14} />
-            <span>자동 저장</span>
+            <span>{t('autoSave')}</span>
           </div>
         </div>
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="오늘 하루는 어떠셨나요? 자유롭게 작성해보세요..."
-          className="w-full h-64 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+          placeholder={t('diaryPlaceholder')}
+          className="w-full h-64 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none dark:bg-gray-700 dark:text-gray-100"
         />
         <div className="flex justify-end mt-2">
-          <span className="text-xs text-gray-400">{content.length} 자</span>
+          <span className="text-xs text-gray-400 dark:text-gray-500">{content.length} {t('characters')}</span>
         </div>
       </div>
     </div>

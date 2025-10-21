@@ -3,17 +3,19 @@ import { Plus, Trash2, Calendar } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { type WorkoutType } from '../types';
 import { getTodayString, getWeekDays, formatDate } from '../utils/date';
-
-const workoutTypes: { type: WorkoutType; label: string; emoji: string; color: string }[] = [
-  { type: 'legs', label: '하체', emoji: '🦵', color: 'bg-blue-500' },
-  { type: 'chest', label: '가슴', emoji: '💪', color: 'bg-red-500' },
-  { type: 'back', label: '등', emoji: '🏋️', color: 'bg-green-500' },
-  { type: 'arms', label: '팔', emoji: '💪', color: 'bg-yellow-500' },
-  { type: 'cardio', label: '유산소', emoji: '🏃', color: 'bg-purple-500' },
-];
+import { useTranslation } from '../i18n/useTranslation';
 
 export const Workout = () => {
   const { addWorkoutEntry, deleteWorkoutEntry, getWorkoutsByDate } = useStore();
+  const { t } = useTranslation();
+
+  const workoutTypes: { type: WorkoutType; label: string; emoji: string; color: string }[] = [
+    { type: 'legs', label: t('workoutTypes.legs'), emoji: '🦵', color: 'bg-blue-500' },
+    { type: 'chest', label: t('workoutTypes.chest'), emoji: '💪', color: 'bg-red-500' },
+    { type: 'back', label: t('workoutTypes.back'), emoji: '🏋️', color: 'bg-green-500' },
+    { type: 'arms', label: t('workoutTypes.arms'), emoji: '💪', color: 'bg-yellow-500' },
+    { type: 'cardio', label: t('workoutTypes.cardio'), emoji: '🏃', color: 'bg-purple-500' },
+  ];
   const [selectedDate, setSelectedDate] = useState(getTodayString());
   const [selectedType, setSelectedType] = useState<WorkoutType>('legs');
   const [exercises, setExercises] = useState('');
@@ -21,7 +23,7 @@ export const Workout = () => {
 
   const handleAddWorkout = () => {
     if (!exercises.trim()) {
-      alert('운동 내용을 입력해주세요.');
+      alert(t('enterWorkout'));
       return;
     }
 
@@ -32,12 +34,8 @@ export const Workout = () => {
       notes: notes || undefined,
     });
 
-    // 폼 초기화
     setExercises('');
     setNotes('');
-
-    // 성공 메시지는 표시하지 않고, 폼만 초기화
-    // 사용자는 아래 목록에서 추가된 것을 확인할 수 있음
   };
 
   const todayWorkouts = getWorkoutsByDate(selectedDate);
@@ -46,8 +44,8 @@ export const Workout = () => {
   return (
     <div className="space-y-4">
       {/* Weekly Overview */}
-      <div className="bg-white rounded-lg shadow-md p-4">
-        <h3 className="text-lg font-semibold text-gray-800 mb-3">주간 운동 기록</h3>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3">{t('weeklyWorkout')}</h3>
         <div className="grid grid-cols-7 gap-2">
           {weekDays.map((day) => {
             const dayString = formatDate(day, 'yyyy-MM-dd');
@@ -61,7 +59,7 @@ export const Workout = () => {
                 className={`p-2 rounded-lg text-center transition-all ${
                   isSelected
                     ? 'bg-primary-500 text-white'
-                    : 'bg-gray-50 hover:bg-gray-100'
+                    : 'bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:bg-gray-700'
                 }`}
               >
                 <div className="text-xs font-medium mb-1">
@@ -85,8 +83,8 @@ export const Workout = () => {
       </div>
 
       {/* Add Workout */}
-      <div className="bg-white rounded-lg shadow-md p-4">
-        <h3 className="text-lg font-semibold text-gray-800 mb-3">운동 기록 추가</h3>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3">{t('addWorkout')}</h3>
 
         {/* Workout Type Selection */}
         <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 mb-4">
@@ -97,7 +95,7 @@ export const Workout = () => {
               className={`p-3 rounded-lg text-center transition-all ${
                 selectedType === workout.type
                   ? 'bg-primary-500 text-white'
-                  : 'bg-gray-100 hover:bg-gray-200'
+                  : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
               }`}
             >
               <div className="text-2xl mb-1">{workout.emoji}</div>
@@ -108,40 +106,40 @@ export const Workout = () => {
 
         {/* Date */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">날짜</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('date')}</label>
           <div className="flex items-center gap-2">
             <Calendar className="text-gray-400" size={20} />
             <input
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:text-gray-100"
             />
           </div>
         </div>
 
         {/* Exercises */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            운동 목록 (한 줄에 하나씩)
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            {t('exerciseList')}
           </label>
           <textarea
             value={exercises}
             onChange={(e) => setExercises(e.target.value)}
-            placeholder="예: 스쿼트 3세트&#10;레그프레스 3세트"
-            className="w-full h-24 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+            placeholder={t('exercisePlaceholder')}
+            className="w-full h-24 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none dark:bg-gray-700 dark:text-gray-100"
           />
         </div>
 
         {/* Notes */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">메모</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('notes')}</label>
           <input
             type="text"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            placeholder="오늘의 컨디션, 특이사항 등..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+            placeholder={t('todaysCondition')}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:text-gray-100"
           />
         </div>
 
@@ -150,17 +148,17 @@ export const Workout = () => {
           className="w-full bg-primary-500 text-white py-2 rounded-lg hover:bg-primary-600 transition-colors flex items-center justify-center gap-2"
         >
           <Plus size={20} />
-          운동 기록 추가
+          {t('addWorkout')}
         </button>
       </div>
 
       {/* Today's Workouts */}
-      <div className="bg-white rounded-lg shadow-md p-4">
-        <h3 className="text-lg font-semibold text-gray-800 mb-3">
-          {formatDate(selectedDate, 'MM월 dd일')} 운동 기록
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3">
+          {formatDate(selectedDate, 'MM월 dd일')} {t('workoutHistory')}
         </h3>
         {todayWorkouts.length === 0 ? (
-          <p className="text-gray-400 text-center py-8">운동 기록이 없습니다</p>
+          <p className="text-gray-400 text-center py-8">{t('noWorkouts')}</p>
         ) : (
           <div className="space-y-3">
             {todayWorkouts.map((workout) => {
@@ -168,12 +166,12 @@ export const Workout = () => {
               return (
                 <div
                   key={workout.id}
-                  className="border border-gray-200 rounded-lg p-3"
+                  className="border border-gray-200 dark:border-gray-600 rounded-lg p-3"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <span className="text-2xl">{workoutInfo?.emoji}</span>
-                      <span className="font-medium">{workoutInfo?.label}</span>
+                      <span className="font-medium text-gray-800 dark:text-gray-100">{workoutInfo?.label}</span>
                     </div>
                     <button
                       onClick={() => deleteWorkoutEntry(workout.id)}
@@ -182,13 +180,13 @@ export const Workout = () => {
                       <Trash2 size={18} />
                     </button>
                   </div>
-                  <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                  <ul className="list-disc list-inside text-sm text-gray-600 dark:text-gray-300 space-y-1">
                     {workout.exercises.map((exercise, idx) => (
                       <li key={idx}>{exercise}</li>
                     ))}
                   </ul>
                   {workout.notes && (
-                    <p className="text-xs text-gray-500 mt-2 italic">{workout.notes}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 italic">{workout.notes}</p>
                   )}
                 </div>
               );
