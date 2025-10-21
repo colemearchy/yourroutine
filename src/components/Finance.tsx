@@ -13,13 +13,7 @@ export const Finance = () => {
   const [type, setType] = useState<'buy' | 'sell'>('buy');
 
   const handleAddTransaction = () => {
-    console.log('Adding transaction:', { ticker, name, quantity, price, type, selectedDate });
-
     // Validation
-    if (!ticker.trim()) {
-      alert('종목 코드를 입력해주세요.');
-      return;
-    }
     if (!name.trim()) {
       alert('종목명을 입력해주세요.');
       return;
@@ -35,16 +29,14 @@ export const Finance = () => {
 
     const transaction = {
       date: selectedDate,
-      ticker: ticker.toUpperCase(),
+      ticker: ticker.trim() ? ticker.toUpperCase() : name.substring(0, 6).toUpperCase(),
       name,
       quantity: Number(quantity),
       price: Number(price),
       type,
     };
 
-    console.log('Transaction to add:', transaction);
     addStockTransaction(transaction);
-    console.log('Transaction added successfully');
 
     // Clear form
     setTicker('');
@@ -153,27 +145,29 @@ export const Finance = () => {
         </div>
 
         {/* Ticker and Name */}
-        <div className="grid grid-cols-2 gap-3 mb-3">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">종목 코드</label>
-            <input
-              type="text"
-              value={ticker}
-              onChange={(e) => setTicker(e.target.value)}
-              placeholder="예: 005930"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">종목명</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="예: 삼성전자"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
-          </div>
+        <div className="mb-3">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            종목명 <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="예: 삼성전자"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+          />
+        </div>
+        <div className="mb-3">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            종목 코드 <span className="text-xs text-gray-500">(선택사항)</span>
+          </label>
+          <input
+            type="text"
+            value={ticker}
+            onChange={(e) => setTicker(e.target.value)}
+            placeholder="예: 005930 (입력하지 않아도 됩니다)"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+          />
         </div>
 
         {/* Quantity and Price */}
