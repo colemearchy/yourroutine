@@ -13,6 +13,8 @@ export const Finance = () => {
   const [type, setType] = useState<'buy' | 'sell'>('buy');
 
   const handleAddTransaction = () => {
+    console.log('Adding transaction:', { ticker, name, quantity, price, type, selectedDate });
+
     // Validation
     if (!ticker.trim()) {
       alert('종목 코드를 입력해주세요.');
@@ -31,14 +33,18 @@ export const Finance = () => {
       return;
     }
 
-    addStockTransaction({
+    const transaction = {
       date: selectedDate,
       ticker: ticker.toUpperCase(),
       name,
       quantity: Number(quantity),
       price: Number(price),
       type,
-    });
+    };
+
+    console.log('Transaction to add:', transaction);
+    addStockTransaction(transaction);
+    console.log('Transaction added successfully');
 
     // Clear form
     setTicker('');
