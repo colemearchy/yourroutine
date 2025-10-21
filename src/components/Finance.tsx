@@ -13,20 +13,38 @@ export const Finance = () => {
   const [type, setType] = useState<'buy' | 'sell'>('buy');
 
   const handleAddTransaction = () => {
-    if (ticker.trim() && name.trim() && quantity && price) {
-      addStockTransaction({
-        date: selectedDate,
-        ticker: ticker.toUpperCase(),
-        name,
-        quantity: Number(quantity),
-        price: Number(price),
-        type,
-      });
-      setTicker('');
-      setName('');
-      setQuantity('');
-      setPrice('');
+    // Validation
+    if (!ticker.trim()) {
+      alert('종목 코드를 입력해주세요.');
+      return;
     }
+    if (!name.trim()) {
+      alert('종목명을 입력해주세요.');
+      return;
+    }
+    if (!quantity || Number(quantity) <= 0) {
+      alert('수량을 입력해주세요.');
+      return;
+    }
+    if (!price || Number(price) <= 0) {
+      alert('가격을 입력해주세요.');
+      return;
+    }
+
+    addStockTransaction({
+      date: selectedDate,
+      ticker: ticker.toUpperCase(),
+      name,
+      quantity: Number(quantity),
+      price: Number(price),
+      type,
+    });
+
+    // Clear form
+    setTicker('');
+    setName('');
+    setQuantity('');
+    setPrice('');
   };
 
   const todayTransactions = getStocksByDate(selectedDate);
