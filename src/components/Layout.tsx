@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react';
-import { Home, BookOpen, Dumbbell, TrendingUp } from 'lucide-react';
+import { Home, BookOpen, Dumbbell, TrendingUp, Settings as SettingsIcon } from 'lucide-react';
 
-export type TabType = 'home' | 'diary' | 'workout' | 'finance';
+export type TabType = 'home' | 'diary' | 'workout' | 'finance' | 'settings';
 
 interface LayoutWithTabsProps {
   activeTab: TabType;
@@ -15,10 +15,11 @@ export const Layout = ({ activeTab, onTabChange, children }: LayoutWithTabsProps
     { id: 'diary' as TabType, label: '다이어리', icon: BookOpen },
     { id: 'workout' as TabType, label: '운동', icon: Dumbbell },
     { id: 'finance' as TabType, label: '금융', icon: TrendingUp },
+    { id: 'settings' as TabType, label: '설정', icon: SettingsIcon },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-20">
       {/* Header */}
       <header className="bg-gradient-to-r from-primary-500 to-primary-600 text-white p-4 shadow-lg">
         <h1 className="text-2xl font-bold">알파 루틴</h1>
@@ -30,7 +31,7 @@ export const Layout = ({ activeTab, onTabChange, children }: LayoutWithTabsProps
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-lg">
         <div className="container mx-auto max-w-4xl">
           <div className="flex justify-around">
             {tabs.map((tab) => {
@@ -43,7 +44,7 @@ export const Layout = ({ activeTab, onTabChange, children }: LayoutWithTabsProps
                   className={`flex flex-col items-center py-3 px-4 flex-1 transition-colors ${
                     isActive
                       ? 'text-primary-500'
-                      : 'text-gray-500 hover:text-gray-700'
+                      : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                   }`}
                 >
                   <Icon size={24} />

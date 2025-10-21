@@ -27,6 +27,12 @@ interface AppStore {
   addStockTransaction: (transaction: Omit<StockTransaction, 'id' | 'createdAt'>) => void;
   deleteStockTransaction: (id: string) => void;
   getStocksByDate: (date: string) => StockTransaction[];
+
+  // Settings
+  darkMode: boolean;
+  language: 'ko' | 'en';
+  toggleDarkMode: () => void;
+  setLanguage: (language: 'ko' | 'en') => void;
 }
 
 export const useStore = create<AppStore>()(
@@ -129,6 +135,22 @@ export const useStore = create<AppStore>()(
       getStocksByDate: (date) => {
         return get().stockTransactions.filter((t) => t.date === date);
       },
+
+      // Settings
+      darkMode: false,
+      language: 'ko',
+      toggleDarkMode: () =>
+        set((state) => {
+          const newDarkMode = !state.darkMode;
+          // Apply dark mode to document
+          if (newDarkMode) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+          return { darkMode: newDarkMode };
+        }),
+      setLanguage: (language) => set({ language }),
     }),
     {
       name: 'routine-storage',

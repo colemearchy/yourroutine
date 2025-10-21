@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { Calendar, Save } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { getTodayString, formatDate } from '../utils/date';
+import { Toast } from './Toast';
 
 export const Diary = () => {
   const { addDiaryEntry, updateDiaryEntry, getDiaryByDate } = useStore();
   const [selectedDate, setSelectedDate] = useState(getTodayString());
   const [content, setContent] = useState('');
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     const entry = getDiaryByDate(selectedDate);
@@ -31,6 +33,7 @@ export const Diary = () => {
     const timer = setTimeout(() => {
       if (content.trim()) {
         handleSave();
+        setShowToast(true);
       }
     }, 1000);
 
@@ -38,8 +41,10 @@ export const Diary = () => {
   }, [content]);
 
   return (
-    <div className="space-y-4">
-      {/* Date Picker */}
+    <>
+      <Toast message="Saved" show={showToast} onClose={() => setShowToast(false)} />
+      <div className="space-y-4">
+        {/* Date Picker */}
       <div className="bg-white rounded-lg shadow-md p-4">
         <div className="flex items-center gap-2">
           <Calendar className="text-primary-500" size={20} />
@@ -75,5 +80,6 @@ export const Diary = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
